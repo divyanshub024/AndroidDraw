@@ -1,13 +1,17 @@
 package com.divyanshu.androiddraw
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import com.divyanshu.draw.activity.DrawingActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
@@ -16,6 +20,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 private const val REQUEST_CODE_DRAW = 101
+private const val PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 102
 class MainActivity : AppCompatActivity() {
 
     lateinit var adapter: DrawAdapter
@@ -23,15 +28,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        adapter = DrawAdapter(this,getFilesPath())
-        recycler_view.adapter = adapter
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE)
+        }else{
+            adapter = DrawAdapter(this,getFilesPath())
+            recycler_view.adapter = adapter
+        }
         fab_add_draw.setOnClickListener {
             val intent = Intent(this, DrawingActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE_DRAW)
         }
     }
 
-    fun getFilesPath(): ArrayList<String>{
+    private fun getFilesPath(): ArrayList<String>{
         val resultList = ArrayList<String>()
         val imageDir = "${Environment.DIRECTORY_PICTURES}/Android Draw/"
         val path = Environment.getExternalStoragePublicDirectory(imageDir)
@@ -51,6 +63,21 @@ class MainActivity : AppCompatActivity() {
                     saveImage(bitmap)
                 }
             }
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when(requestCode){
+            PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)){
+                    adapter = DrawAdapter(this,getFilesPath())
+                    recycler_view.adapter = adapter
+                }else{
+                    finish()
+                }
+                return
+            }
+            else -> {}
         }
     }
 
