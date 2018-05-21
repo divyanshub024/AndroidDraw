@@ -1,6 +1,7 @@
 # Android Draw [![](https://jitpack.io/v/divyanshub024/AndroidDraw.svg)](https://jitpack.io/#divyanshub024/AndroidDraw)
-
 A drawing view for your android application.
+
+<a href='https://play.google.com/store/apps/details?id=com.divyanshu.androiddraw&rdid=com.divyanshu.androiddraw&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width = "320"/></a>
 
 <img src="https://github.com/divyanshub024/AndroidDraw/blob/master/Art/cover.png" width="320">
 
