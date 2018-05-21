@@ -36,12 +36,11 @@ There are two ways to use this library.
 
 You can call the `Drawing Activity` using `startActivityForResult` which will return you bitmap in byteArray. By using this method you will have all the features like change strokeWidth, change strokeColor, change Alpha, erase, redo, undo.
 
-call the activity
-
 ```kotlin
 val intent = Intent(this, DrawingActivity::class.java)
 startActivityForResult(intent, REQUEST_CODE_DRAW)
 
+// Get bitmap in onActivityResult
 override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (data != null && resultCode == Activity.RESULT_OK) {
             when(requestCode){
