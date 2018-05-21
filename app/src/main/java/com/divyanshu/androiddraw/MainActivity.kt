@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
         val resultList = ArrayList<String>()
         val imageDir = "${Environment.DIRECTORY_PICTURES}/Android Draw/"
         val path = Environment.getExternalStoragePublicDirectory(imageDir)
+        path.mkdirs()
         val imageList = path.listFiles()
         for (imagePath in imageList){
             resultList.add(imagePath.absolutePath)
