@@ -56,6 +56,8 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 ```
 ### 2.Use DrawView
 
+<img src="https://github.com/divyanshub024/AndroidDraw/blob/master/Art/banner.png" width="320">
+
 #### Declaration
 ```xml
 <com.divyanshu.draw.widget.DrawView
