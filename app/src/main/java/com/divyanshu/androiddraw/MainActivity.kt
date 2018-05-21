@@ -8,7 +8,6 @@ import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
-import android.support.v7.widget.GridLayoutManager
 import com.divyanshu.draw.activity.DrawingActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
@@ -17,23 +16,22 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 private const val REQUEST_CODE_DRAW = 101
-
 class MainActivity : AppCompatActivity() {
 
+    lateinit var adapter: DrawAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        recycler_view.layoutManager = GridLayoutManager(this,2)
-        recycler_view.adapter = DrawAdapter(getFilePath())
-
+        adapter = DrawAdapter(this,getFilesPath())
+        recycler_view.adapter = adapter
         fab_add_draw.setOnClickListener {
             val intent = Intent(this, DrawingActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE_DRAW)
         }
     }
 
-    private fun getFilePath(): ArrayList<String>{
+    fun getFilesPath(): ArrayList<String>{
         val resultList = ArrayList<String>()
         val imageDir = "${Environment.DIRECTORY_PICTURES}/Android Draw/"
         val path = Environment.getExternalStoragePublicDirectory(imageDir)
@@ -66,5 +64,10 @@ class MainActivity : AppCompatActivity() {
         bitmap.compress(Bitmap.CompressFormat.PNG,100,outputStream)
         outputStream.flush()
         outputStream.close()
+        updateRecyclerView(Uri.fromFile(file))
+    }
+
+    private fun updateRecyclerView(uri: Uri) {
+        adapter.addItem(uri)
     }
 }
