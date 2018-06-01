@@ -44,6 +44,7 @@ class DrawingActivity : AppCompatActivity() {
     }
 
     private fun setUpDrawTools() {
+        circle_view_opacity.setCircleRadius(100f)
         image_draw_eraser.setOnClickListener {
             draw_view.clearCanvas()
             toggleDrawTools(draw_tools,false)
@@ -54,6 +55,8 @@ class DrawingActivity : AppCompatActivity() {
             }else if (draw_tools.translationY == (0).toPx && seekBar_width.visibility == View.VISIBLE){
                 toggleDrawTools(draw_tools,false)
             }
+            circle_view_width.visibility = View.VISIBLE
+            circle_view_opacity.visibility = View.GONE
             seekBar_width.visibility = View.VISIBLE
             seekBar_opacity.visibility = View.GONE
             draw_color_palette.visibility = View.GONE
@@ -64,6 +67,8 @@ class DrawingActivity : AppCompatActivity() {
             }else if (draw_tools.translationY == (0).toPx && seekBar_opacity.visibility == View.VISIBLE){
                 toggleDrawTools(draw_tools,false)
             }
+            circle_view_width.visibility = View.GONE
+            circle_view_opacity.visibility = View.VISIBLE
             seekBar_width.visibility = View.GONE
             seekBar_opacity.visibility = View.VISIBLE
             draw_color_palette.visibility = View.GONE
@@ -74,6 +79,8 @@ class DrawingActivity : AppCompatActivity() {
             }else if (draw_tools.translationY == (0).toPx && draw_color_palette.visibility == View.VISIBLE){
                 toggleDrawTools(draw_tools,false)
             }
+            circle_view_width.visibility = View.GONE
+            circle_view_opacity.visibility = View.GONE
             seekBar_width.visibility = View.GONE
             seekBar_opacity.visibility = View.GONE
             draw_color_palette.visibility = View.VISIBLE
@@ -98,31 +105,52 @@ class DrawingActivity : AppCompatActivity() {
 
     private fun colorSelector() {
         image_color_black.setOnClickListener {
-            draw_view.setColor(ResourcesCompat.getColor(resources, R.color.color_black,null))
+            val color = ResourcesCompat.getColor(resources, R.color.color_black,null)
+            draw_view.setColor(color)
+            circle_view_opacity.setColor(color)
+            circle_view_width.setColor(color)
             scaleColorView(image_color_black)
         }
         image_color_red.setOnClickListener {
-            draw_view.setColor(ResourcesCompat.getColor(resources, R.color.color_red,null))
+            val color = ResourcesCompat.getColor(resources, R.color.color_red,null)
+            draw_view.setColor(color)
+            circle_view_opacity.setColor(color)
+            circle_view_width.setColor(color)
             scaleColorView(image_color_red)
         }
         image_color_yellow.setOnClickListener {
-            draw_view.setColor(ResourcesCompat.getColor(resources, R.color.color_yellow,null))
+            val color = ResourcesCompat.getColor(resources, R.color.color_yellow,null)
+            draw_view.setColor(color)
+            circle_view_opacity.setColor(color)
+            circle_view_width.setColor(color)
             scaleColorView(image_color_yellow)
         }
         image_color_green.setOnClickListener {
-            draw_view.setColor(ResourcesCompat.getColor(resources, R.color.color_green,null))
+            val color = ResourcesCompat.getColor(resources, R.color.color_green,null)
+            draw_view.setColor(color)
+            circle_view_opacity.setColor(color)
+            circle_view_width.setColor(color)
             scaleColorView(image_color_green)
         }
         image_color_blue.setOnClickListener {
-            draw_view.setColor(ResourcesCompat.getColor(resources, R.color.color_blue,null))
+            val color = ResourcesCompat.getColor(resources, R.color.color_blue,null)
+            draw_view.setColor(color)
+            circle_view_opacity.setColor(color)
+            circle_view_width.setColor(color)
             scaleColorView(image_color_blue)
         }
         image_color_pink.setOnClickListener {
-            draw_view.setColor(ResourcesCompat.getColor(resources, R.color.color_pink,null))
+            val color = ResourcesCompat.getColor(resources, R.color.color_pink,null)
+            draw_view.setColor(color)
+            circle_view_opacity.setColor(color)
+            circle_view_width.setColor(color)
             scaleColorView(image_color_pink)
         }
         image_color_brown.setOnClickListener {
-            draw_view.setColor(ResourcesCompat.getColor(resources, R.color.color_brown,null))
+            val color =  ResourcesCompat.getColor(resources, R.color.color_brown,null)
+            draw_view.setColor(color)
+            circle_view_opacity.setColor(color)
+            circle_view_width.setColor(color)
             scaleColorView(image_color_brown)
         }
     }
@@ -159,6 +187,7 @@ class DrawingActivity : AppCompatActivity() {
         seekBar_width.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 draw_view.setStrokeWidth(progress.toFloat())
+                circle_view_width.setCircleRadius(progress.toFloat())
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -171,6 +200,7 @@ class DrawingActivity : AppCompatActivity() {
         seekBar_opacity.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 draw_view.setAlpha(progress)
+                circle_view_opacity.setAlpha(progress)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
