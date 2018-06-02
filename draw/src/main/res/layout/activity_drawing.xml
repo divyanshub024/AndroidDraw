@@ -30,7 +30,6 @@
         android:layout_height="56dp"
         android:src="@drawable/ic_send_black_24dp"
         android:padding="16dp"
-        android:tint="@color/colorAccent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:background="@color/color_white"
@@ -125,26 +124,36 @@
             android:layout_width="0dp"
             android:layout_height="56dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/circle_view_width"
             app:layout_constraintTop_toBottomOf="@id/image_draw_eraser"
-            android:progressTint="@color/colorAccent"
-            android:thumbTint="@color/colorAccent"
             android:progress="8"
             android:paddingStart="16dp"
             android:paddingEnd="16dp" />
+
+        <com.divyanshu.draw.widget.CircleView
+            android:id="@+id/circle_view_width"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            app:layout_constraintTop_toBottomOf="@id/image_draw_eraser"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <SeekBar
             android:id="@+id/seekBar_opacity"
             android:layout_width="0dp"
             android:layout_height="56dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/circle_view_opacity"
             app:layout_constraintTop_toBottomOf="@id/image_draw_eraser"
             android:progress="100"
-            android:progressTint="@color/colorAccent"
-            android:thumbTint="@color/colorAccent"
             android:paddingStart="16dp"
             android:paddingEnd="16dp" />
+
+        <com.divyanshu.draw.widget.CircleView
+            android:id="@+id/circle_view_opacity"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            app:layout_constraintTop_toBottomOf="@id/image_draw_eraser"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <include
             android:id="@+id/draw_color_palette"
