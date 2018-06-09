@@ -28,7 +28,7 @@
         android:id="@+id/image_send_drawing"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:src="@drawable/ic_send_black_24dp"
+        android:src="@drawable/ic_save_black_24dp"
         android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

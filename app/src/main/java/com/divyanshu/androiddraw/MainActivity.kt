@@ -2,6 +2,8 @@ package com.divyanshu.androiddraw
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -12,6 +14,9 @@ import android.os.Bundle
 import android.os.Environment
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.util.Log
+import android.view.WindowManager
+import android.widget.EditText
 import com.divyanshu.draw.activity.DrawingActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
@@ -61,10 +66,27 @@ class MainActivity : AppCompatActivity() {
                 REQUEST_CODE_DRAW -> {
                     val result= data.getByteArrayExtra("bitmap")
                     val bitmap = BitmapFactory.decodeByteArray(result, 0, result.size)
-                    saveImage(bitmap)
+                    showSaveDialog(bitmap)
                 }
             }
         }
+    }
+
+    private fun showSaveDialog(bitmap: Bitmap) {
+        val alertDialog = AlertDialog.Builder(this)
+        val dialogView = layoutInflater.inflate(R.layout.dialog_save, null)
+        alertDialog.setView(dialogView)
+        val fileNameEditText: EditText = dialogView.findViewById(R.id.editText_file_name)
+        val filename = UUID.randomUUID().toString()
+        fileNameEditText.setSelectAllOnFocus(true)
+        fileNameEditText.setText(filename)
+        alertDialog.setTitle("Save Drawing")
+                .setPositiveButton("ok") { _, _ -> saveImage(bitmap,fileNameEditText.text.toString()) }
+                .setNegativeButton("Cancel") { _, _ -> }
+
+        val dialog = alertDialog.create()
+        dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+        dialog.show()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -82,10 +104,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveImage(bitmap: Bitmap) {
+    private fun saveImage(bitmap: Bitmap, fileName: String) {
         val imageDir = "${Environment.DIRECTORY_PICTURES}/Android Draw/"
         val path = Environment.getExternalStoragePublicDirectory(imageDir)
-        val file = File(path, UUID.randomUUID().toString()+".png")
+        Log.e("path",path.toString())
+        val file = File(path, "$fileName.png")
         path.mkdirs()
         file.createNewFile()
         val outputStream = FileOutputStream(file)

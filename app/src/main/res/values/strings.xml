@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Android Draw</string>
+    <string name="enter_file_name">Enter file name</string>
 </resources>
