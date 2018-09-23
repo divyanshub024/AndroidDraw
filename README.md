@@ -1,6 +1,6 @@
 <img src="https://github.com/divyanshub024/AndroidDraw/blob/master/Art/AndroidDraw.png">
 
-# Android Draw [![](https://jitpack.io/v/divyanshub024/AndroidDraw.svg)](https://jitpack.io/#divyanshub024/AndroidDraw)
+# Android Draw [![](https://jitpack.io/v/divyanshub024/AndroidDraw.svg)](https://jitpack.io/#divyanshub024/AndroidDraw) [![Android Arsenal]( https://img.shields.io/badge/Android%20Arsenal-AndroidDraw-green.svg?style=flat )]( https://android-arsenal.com/details/1/7150 )
 
 A drawing view for your android application							
 
