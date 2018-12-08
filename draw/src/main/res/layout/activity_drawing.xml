@@ -46,7 +46,7 @@
         android:elevation="4dp"
         android:translationY="56dp" >
 
-        <com.divyanshu.draw.widget.CheckableImageView
+        <ImageView
             android:id="@+id/image_draw_eraser"
             android:layout_width="56dp"
             android:layout_height="56dp"

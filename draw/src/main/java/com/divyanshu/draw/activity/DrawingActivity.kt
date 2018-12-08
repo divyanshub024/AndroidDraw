@@ -51,8 +51,6 @@ class DrawingActivity : AppCompatActivity() {
         image_draw_eraser.setOnClickListener {
             draw_view.toggleEraser()
             toggleDrawTools(draw_tools,false)
-//            ImageViewCompat.setImageTintList(image_draw_eraser, ColorStateList.valueOf())
-
         }
         image_draw_eraser.setOnLongClickListener {
             draw_view.clearCanvas()
