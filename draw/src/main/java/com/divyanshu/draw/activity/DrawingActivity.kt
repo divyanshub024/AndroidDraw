@@ -2,11 +2,14 @@ package com.divyanshu.draw.activity
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.content.res.ResourcesCompat
+import android.support.v4.widget.ImageViewCompat
+import android.util.Log
 import android.view.View
 import android.widget.SeekBar
 import com.divyanshu.draw.R
@@ -46,8 +49,13 @@ class DrawingActivity : AppCompatActivity() {
     private fun setUpDrawTools() {
         circle_view_opacity.setCircleRadius(100f)
         image_draw_eraser.setOnClickListener {
+            draw_view.toggleEraser()
+            toggleDrawTools(draw_tools,false)
+        }
+        image_draw_eraser.setOnLongClickListener {
             draw_view.clearCanvas()
             toggleDrawTools(draw_tools,false)
+            true
         }
         image_draw_width.setOnClickListener {
             if (draw_tools.translationY == (56).toPx){

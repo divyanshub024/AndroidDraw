@@ -10,7 +10,7 @@ import android.view.View
 import java.util.LinkedHashMap
 
 class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
-    var mPaths = LinkedHashMap<MyPath, PaintOptions>()
+    private var mPaths = LinkedHashMap<MyPath, PaintOptions>()
 
     private var mLastPaths = LinkedHashMap<MyPath, PaintOptions>()
     private var mUndonePaths = LinkedHashMap<MyPath, PaintOptions>()
@@ -25,6 +25,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private var mStartY = 0f
     private var mIsSaving = false
     private var mIsStrokeWidthBarEnabled = false
+    private var isEraserOn = false
 
     init {
         mPaint.apply {
@@ -117,7 +118,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     }
 
     private fun changePaint(paintOptions: PaintOptions) {
-        mPaint.color = paintOptions.color
+        mPaint.color = if (paintOptions.isEraserOn) Color.WHITE else paintOptions.color
         mPaint.strokeWidth = paintOptions.strokeWidth
     }
 
@@ -151,9 +152,9 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
             mPath.lineTo(mCurX + 1, mCurY)
         }
 
-        mPaths.put(mPath, mPaintOptions)
+        mPaths[mPath] = mPaintOptions
         mPath = MyPath()
-        mPaintOptions = PaintOptions(mPaintOptions.color, mPaintOptions.strokeWidth, mPaintOptions.alpha)
+        mPaintOptions = PaintOptions(mPaintOptions.color, mPaintOptions.strokeWidth, mPaintOptions.alpha, mPaintOptions.isEraserOn)
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -174,4 +175,11 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         invalidate()
         return true
     }
+
+    fun toggleEraser() {
+        isEraserOn = !isEraserOn
+        mPaintOptions.isEraserOn = isEraserOn
+        invalidate()
+    }
+
 }
