@@ -13,6 +13,7 @@ import android.util.Log
 import android.view.View
 import android.widget.SeekBar
 import com.divyanshu.draw.R
+import com.divyanshu.draw.widget.DrawView
 import kotlinx.android.synthetic.main.activity_drawing.*
 import kotlinx.android.synthetic.main.color_palette_view.*
 import java.io.ByteArrayOutputStream
@@ -26,7 +27,7 @@ class DrawingActivity : AppCompatActivity() {
         image_close_drawing.setOnClickListener {
             finish()
         }
-        image_send_drawing.setOnClickListener {
+        fab_send_drawing.setOnClickListener {
             val bStream = ByteArrayOutputStream()
             val bitmap = draw_view.getBitmap()
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, bStream)
