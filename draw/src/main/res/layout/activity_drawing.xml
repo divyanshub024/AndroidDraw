@@ -14,26 +14,28 @@
 
     <ImageView
         android:id="@+id/image_close_drawing"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:src="@drawable/ic_close_black_24dp"
         android:tint="@color/icon_color"
-        android:padding="16dp"
+        android:padding="12dp"
+        android:layout_margin="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:background="@color/color_white"
         android:foreground="?selectableItemBackgroundBorderless" />
 
-    <ImageView
-        android:id="@+id/image_send_drawing"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:src="@drawable/ic_save_black_24dp"
-        android:padding="16dp"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_send_drawing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:backgroundTint="@color/color_black"
+        android:src="@drawable/ic_done_black_24dp"
+        android:tint="@color/color_white"
+        app:layout_constraintTop_toTopOf="@id/image_close_drawing"
+        android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/color_white"
-        android:foreground="?selectableItemBackgroundBorderless" />
+        app:fabSize="mini"/>
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/draw_tools"
