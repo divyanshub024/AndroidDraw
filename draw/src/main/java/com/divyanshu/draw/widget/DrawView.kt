@@ -25,7 +25,9 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private var mStartY = 0f
     private var mIsSaving = false
     private var mIsStrokeWidthBarEnabled = false
-    private var isEraserOn = false
+
+    var isEraserOn = false
+        private set
 
     init {
         mPaint.apply {
