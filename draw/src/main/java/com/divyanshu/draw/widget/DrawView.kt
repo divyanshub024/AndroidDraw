@@ -24,6 +24,8 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private var mStartX = 0f
     private var mStartY = 0f
     private var mIsSaving = false
+    private var mDownTime: Long = 0
+    private var mCanDraw: Boolean = true
     private var mIsStrokeWidthBarEnabled = false
 
     var isEraserOn = false
@@ -163,15 +165,38 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         val x = event.x
         val y = event.y
 
-        when (event.action) {
+        when (event.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
                 mStartX = x
                 mStartY = y
                 actionDown(x, y)
                 mUndonePaths.clear()
+                mCanDraw = true
+                mDownTime = System.currentTimeMillis()
             }
-            MotionEvent.ACTION_MOVE -> actionMove(x, y)
-            MotionEvent.ACTION_UP -> actionUp()
+            MotionEvent.ACTION_POINTER_DOWN -> {
+                if (mCanDraw && event.getPointerId(event.actionIndex) == 1) {
+                    val diffTime = System.currentTimeMillis() - mDownTime
+                    if (diffTime <= FINGER_PRESS_INTERVAL_TIME) {
+                        mPath.reset()
+                    } else {
+                        actionUp()
+                    }
+                }
+                mCanDraw = false
+            }
+            MotionEvent.ACTION_MOVE -> {
+                if (mCanDraw) {
+                    val pointIndex = event.findPointerIndex(0)
+                    actionMove(event.getX(pointIndex), event.getY(pointIndex))
+                }
+            }
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> {
+                if (event.getPointerId(event.actionIndex) == 0) {
+                    if (mCanDraw) actionUp()
+                    mCanDraw = false
+                }
+            }
         }
 
         invalidate()
@@ -182,6 +207,11 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         isEraserOn = !isEraserOn
         mPaintOptions.isEraserOn = isEraserOn
         invalidate()
+    }
+
+    companion object {
+        private val TAG = DrawView::class.java.simpleName
+        private const val FINGER_PRESS_INTERVAL_TIME = 100
     }
 
 }
