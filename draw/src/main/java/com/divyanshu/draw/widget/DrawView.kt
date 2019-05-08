@@ -190,7 +190,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
             MotionEvent.ACTION_MOVE -> {
                 if (mCanDraw) {
                     val pointIndex = event.findPointerIndex(0)
-                    actionMove(event.getX(pointIndex), event.getY(pointIndex))
+                    if (pointIndex != -1) actionMove(event.getX(pointIndex), event.getY(pointIndex))
                 }
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> {
