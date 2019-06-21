@@ -2,8 +2,8 @@ package com.divyanshu.draw.widget
 
 import android.content.Context
 import android.graphics.*
-import android.support.annotation.ColorInt
-import android.support.v4.graphics.ColorUtils
+import androidx.annotation.ColorInt
+import androidx.core.graphics.ColorUtils
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View

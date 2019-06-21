@@ -5,10 +5,10 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.Bitmap
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.content.res.ResourcesCompat
-import android.support.v4.widget.ImageViewCompat
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.widget.ImageViewCompat
 import android.util.Log
 import android.view.View
 import android.widget.SeekBar
