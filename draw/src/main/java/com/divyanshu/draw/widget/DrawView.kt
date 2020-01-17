@@ -9,7 +9,9 @@ import android.view.MotionEvent
 import android.view.View
 import java.util.LinkedHashMap
 
-class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
+class DrawView @JvmOverloads constructor(
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
     private var mPaths = LinkedHashMap<MyPath, PaintOptions>()
 
     private var mLastPaths = LinkedHashMap<MyPath, PaintOptions>()
