@@ -17,8 +17,8 @@ import androidx.core.content.ContextCompat
 import android.util.Log
 import android.view.WindowManager
 import android.widget.EditText
+import com.divyanshu.androiddraw.databinding.ActivityMainBinding
 import com.divyanshu.draw.activity.DrawingActivity
-import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
@@ -29,9 +29,13 @@ private const val PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 102
 class MainActivity : AppCompatActivity() {
 
     lateinit var adapter: DrawAdapter
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
             != PackageManager.PERMISSION_GRANTED){
@@ -40,9 +44,9 @@ class MainActivity : AppCompatActivity() {
                     PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE)
         }else{
             adapter = DrawAdapter(this,getFilesPath())
-            recycler_view.adapter = adapter
+            binding.recyclerView.adapter = adapter
         }
-        fab_add_draw.setOnClickListener {
+        binding.fabAddDraw.setOnClickListener {
             val intent = Intent(this, DrawingActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE_DRAW)
         }
@@ -65,7 +69,7 @@ class MainActivity : AppCompatActivity() {
             when(requestCode){
                 REQUEST_CODE_DRAW -> {
                     val result= data.getByteArrayExtra("bitmap")
-                    val bitmap = BitmapFactory.decodeByteArray(result, 0, result.size)
+                    val bitmap = BitmapFactory.decodeByteArray(result, 0, result!!.size)
                     showSaveDialog(bitmap)
                 }
             }
@@ -85,7 +89,7 @@ class MainActivity : AppCompatActivity() {
                 .setNegativeButton("Cancel") { _, _ -> }
 
         val dialog = alertDialog.create()
-        dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+        dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
         dialog.show()
     }
 
@@ -94,7 +98,7 @@ class MainActivity : AppCompatActivity() {
             PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE -> {
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)){
                     adapter = DrawAdapter(this,getFilesPath())
-                    recycler_view.adapter = adapter
+                    binding.recyclerView.adapter = adapter
                 }else{
                     finish()
                 }
