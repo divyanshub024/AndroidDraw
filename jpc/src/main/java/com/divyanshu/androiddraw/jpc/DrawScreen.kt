@@ -8,6 +8,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -16,15 +19,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.navigation.NavController
 import org.xmlpull.v1.XmlPullParser
 import com.divyanshu.draw.widget.DrawView
+import java.util.*
 
 @ExperimentalAnimationApi
 @Composable
-fun DrawScreen() {
+fun DrawScreen(
+    navController: NavController
+) {
+    val context = LocalContext.current
+
     // States in which a particular tool is selected
     val showDrawTools = remember { mutableStateOf(false) } // Needed for ColorPalette, StrokeWidth, and Opacity
     val isEraserSelected = remember { mutableStateOf(false) }
@@ -42,9 +53,34 @@ fun DrawScreen() {
     // The color of the eraser. It has to be the same as the background color
     val backgroundColor = MaterialTheme.colors.background
 
+    // For saving
+    val showSaveDialog = remember { mutableStateOf(false) }
+    val resultBitmap = remember { mutableStateOf(Utils.createEmptyBitmap(1, 1)) }
+
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
+        // Close button and Save button
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.Black),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = { navController.navigateUp() }) {
+                Icon(imageVector = Icons.Default.Close, tint = Color.White, contentDescription = "Close")
+            }
+            IconButton(
+                modifier = Modifier.size(42.dp),
+                onClick = {
+                    showSaveDialog.value = true
+                }
+            ) {
+                Icon(imageVector = Icons.Default.Check, tint = Color.White, contentDescription = "Save")
+            }
+        }
+        Divider()
         // Get the DrawView from xml
         AndroidView(
             modifier = Modifier
@@ -73,6 +109,9 @@ fun DrawScreen() {
             if (isRedoSelected.value) {
                 drawView.redo()
                 isRedoSelected.value = false
+            }
+            if (showSaveDialog.value) {
+                resultBitmap.value = drawView.getBitmap()
             }
         }
         // Toolbar at the bottom
@@ -291,5 +330,42 @@ fun DrawScreen() {
                 }
             }
         }
+    }
+
+    if (showSaveDialog.value) {
+        val fileName = remember { mutableStateOf(UUID.randomUUID().toString()) }
+        AlertDialog(
+            onDismissRequest = { showSaveDialog.value = false },
+            title = {
+                Text(
+                    text = "Save Drawing",
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            text = {
+                OutlinedTextField(
+                    value = fileName.value,
+                    maxLines = 1,
+                    onValueChange = { fileName.value = it }
+                )
+            },
+            dismissButton = {
+                OutlinedButton(
+                    onClick = { showSaveDialog.value = false }
+                ) {
+                    Text(text = "Cancel")
+                }
+            },
+            confirmButton = {
+                OutlinedButton(
+                    onClick = {
+                        Utils.saveImage(context, resultBitmap.value, fileName.value)
+                        navController.navigateUp()
+                    }
+                ) {
+                    Text(text = "OK")
+                }
+            }
+        )
     }
 }
