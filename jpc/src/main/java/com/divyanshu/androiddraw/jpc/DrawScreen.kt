@@ -3,6 +3,8 @@ package com.divyanshu.androiddraw.jpc
 import android.util.Xml
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -50,6 +53,12 @@ fun DrawScreen(
     val strokeWidth = remember { mutableStateOf(5f) }
     val opacity = remember { mutableStateOf(100f) }
 
+    // Used to animate the ToolBar going up and down based on the visibility of DrawTools
+    val transition = updateTransition(showDrawTools.value)
+    val elevation by transition.animateDp { isSelected ->
+        if (isSelected) 40.dp else 0.dp
+    }
+
     // The color of the eraser. It has to be the same as the background color
     val backgroundColor = MaterialTheme.colors.background
 
@@ -57,35 +66,12 @@ fun DrawScreen(
     val showSaveDialog = remember { mutableStateOf(false) }
     val resultBitmap = remember { mutableStateOf(Utils.createEmptyBitmap(1, 1)) }
 
-    Column(
+    Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        // Close button and Save button
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.Black),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(onClick = { navController.navigateUp() }) {
-                Icon(imageVector = Icons.Default.Close, tint = Color.White, contentDescription = "Close")
-            }
-            IconButton(
-                modifier = Modifier.size(42.dp),
-                onClick = {
-                    showSaveDialog.value = true
-                }
-            ) {
-                Icon(imageVector = Icons.Default.Check, tint = Color.White, contentDescription = "Save")
-            }
-        }
-        Divider()
         // Get the DrawView from xml
         AndroidView(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
+            modifier = Modifier.fillMaxSize(),
             factory = {
                 val parser: XmlPullParser = it.resources.getXml(R.xml.draw_view)
                 try {
@@ -114,10 +100,36 @@ fun DrawScreen(
                 resultBitmap.value = drawView.getBitmap()
             }
         }
+        // Close button
+        IconButton(
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .size(50.dp)
+                .padding(4.dp),
+            onClick = { navController.navigateUp() }
+        ) {
+            Icon(imageVector = Icons.Default.Close, tint = Color.Gray, contentDescription = "Close")
+        }
+        // Save button
+        IconButton(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .size(50.dp)
+                .padding(4.dp)
+                .clip(CircleShape)
+                .background(Color.Black),
+            onClick = {
+                showSaveDialog.value = true
+            }
+        ) {
+            Icon(imageVector = Icons.Default.Check, tint = Color.White, contentDescription = "Save")
+        }
         // Toolbar at the bottom
-        Divider()
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .padding(0.dp, 0.dp, 0.dp, elevation),
             horizontalArrangement = Arrangement.Center,
         ) {
             IconButton(
@@ -200,7 +212,10 @@ fun DrawScreen(
             }
         }
         // Box that comes up animated from the bottom. Only for ColorPalette, StrokeWidth, and Opacity
-        AnimatedVisibility(visible = showDrawTools.value) {
+        AnimatedVisibility(
+            modifier = Modifier.align(Alignment.BottomCenter),
+            visible = showDrawTools.value
+        ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
