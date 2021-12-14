@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
@@ -23,10 +24,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
@@ -84,45 +87,64 @@ fun ListScreen(
         },
         scaffoldState = scaffoldState
     ) {
-        LazyVerticalGrid(
-            modifier = Modifier.fillMaxSize(),
-            cells = GridCells.Fixed(count = 2),
-            state = gridListState,
-            contentPadding = PaddingValues(
-                start = 6.dp,
-                top = 8.dp,
-                end = 6.dp,
-                bottom = 8.dp
-            ),
-            content = {
-                items(imagePathList.value.size) { index ->
-                    val imagePath = imagePathList.value[index]
+        Column(modifier = Modifier.fillMaxSize()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
+                    .background(Color.Black)
+            ) {
+                Text(
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .padding(10.dp, 0.dp),
+                    text = "Android Draw",
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+            }
+            LazyVerticalGrid(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                cells = GridCells.Fixed(count = 2),
+                state = gridListState,
+                contentPadding = PaddingValues(
+                    start = 6.dp,
+                    top = 8.dp,
+                    end = 6.dp,
+                    bottom = 8.dp
+                ),
+                content = {
+                    items(imagePathList.value.size) { index ->
+                        val imagePath = imagePathList.value[index]
 
-                    val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                        val source = ImageDecoder.createSource(context.contentResolver, imagePath)
-                        ImageDecoder.decodeBitmap(source)
-                    }
-                    else {
-                        MediaStore.Images.Media.getBitmap(context.contentResolver, imagePath)
-                    }
+                        val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                            val source = ImageDecoder.createSource(context.contentResolver, imagePath)
+                            ImageDecoder.decodeBitmap(source)
+                        }
+                        else {
+                            MediaStore.Images.Media.getBitmap(context.contentResolver, imagePath)
+                        }
 
-                    bitmap?.let {
-                        Card(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(1.dp),
-                            shape = RoundedCornerShape(15.dp),
-                            border = BorderStroke(width = 1.dp, color = Color.Gray)
-                        ) {
-                            Image(
-                                modifier = Modifier.fillMaxWidth(),
-                                bitmap = bitmap.asImageBitmap(),
-                                contentDescription = "Image"
-                            )
+                        bitmap?.let {
+                            Card(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(1.dp),
+                                shape = RoundedCornerShape(15.dp),
+                                border = BorderStroke(width = 1.dp, color = Color.Gray)
+                            ) {
+                                Image(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    bitmap = bitmap.asImageBitmap(),
+                                    contentDescription = "Image"
+                                )
+                            }
                         }
                     }
                 }
-            }
-        )
+            )
+        }
     }
 }
